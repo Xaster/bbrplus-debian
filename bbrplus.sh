@@ -36,15 +36,15 @@ net.ipv4.tcp_congestion_control=bbr_plus
 EOF
 sysctl -p
 
+#Remove build dependencies
+apt purge --auto-remove -y $(cat build-deps.txt | grep "Unpacking " | cut -d " " -f 2)
+apt clean
+
 #Remove temporary files
 rm -rf \
   $HOME/bbrplus-debian \
   $HOME/build-deps.txt \
   /var/lib/apt/lists/*
-
-#Remove build dependencies
-apt purge --auto-remove -y $(cat build-deps.txt | grep "Unpacking " | cut -d " " -f 2)
-apt clean
 
 #Check TCP-BBR Plus status
 sysctl net.ipv4.tcp_available_congestion_control | grep -q bbr_plus
